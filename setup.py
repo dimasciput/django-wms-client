@@ -27,7 +27,6 @@ setup(
         "Django",
         "django-leaflet",
         "psycopg2",
-        "factory-boy",
         "django-pipeline",
         "OWSLib",
         "pillow"],

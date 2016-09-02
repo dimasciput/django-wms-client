@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block meta_title %}Map{% endblock %}
+{% block title %}Map{% endblock %}
+{% block extra_css %}
+    <style>
+        .thumbnail {
+            padding: 20px;
+        }
+    </style>
+{% endblock extra_css %}
+{% block main %}
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Web Mapping Gallery</h1>
+
+            <p>
+                This is a gallery of web maps.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for wms in wms_set %}
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <a href="/map/{{ wms.slug }}">
+                        <img src="{{ MEDIA_URL }}/{{ wms.preview }}"
+                             alt="{{ wms.name }} Thumbnail">
+                    </a>
+                    <div>
+                        <h3>{{ wms.name }}</h3>
+                        <p>{{ wms.description }}</p>
+                        <p><a href="{{ wms.slug }}"
+                              class="btn btn-default"
+                              role="button">View</a></p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    </div> <!-- /container -->
+{% endblock %}

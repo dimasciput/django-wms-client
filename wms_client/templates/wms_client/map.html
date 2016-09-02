@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block meta_title %}{{ wms.name }}{% endblock %}
+{% block title %}{{ wms.name }}{% endblock %}
+
+{% block extra_css %}
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body, #map {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 100%;
+            width: 100%;
+            background: white;
+            z-index: 9999;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">
+
+{% endblock extra_css %}
+
+
+{% block main %}
+    <div id="map"></div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+    <script>
+        $(document).ready(function () {
+            var map = L.map('map', {
+                center: [{{ wms.center_south }}, {{ wms.center_east }}],
+                zoom: {{ wms.zoom }},
+                minZoom: {{ wms.min_zoom }},
+                maxZoom: {{ wms.max_zoom }},
+                maxBounds: [
+                    [{{ wms.north }}, {{ wms.east }}],
+                    [{{ wms.south }}, {{ wms.west }}]
+                ]
+            });
+            var qgis = L.tileLayer.wms("{{  wms.uri }}", {
+                layers: '{{ wms.layers }}',
+                format: 'image/png',
+                transparent: true,
+                attribution: ''
+            }).addTo(map);
+        });
+    </script>
+{% endblock extra_js %}
