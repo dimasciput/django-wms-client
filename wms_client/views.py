@@ -37,7 +37,6 @@ def map(request, slug):
     :returns: Response will be a nice looking map page.
     :rtype: HttpResponse
     """
-    print "slug"
     wms = WMSResource.objects.get(slug=slug)
     return render(
         request,
