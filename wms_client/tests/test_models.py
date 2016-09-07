@@ -2,7 +2,7 @@
 """Module related to test for all the models."""
 from django.test import TestCase
 
-from wms_client.tests.model_factories import WMSFactory
+from mezzanine_wms_client.tests.model_factories import WMSFactory
 
 
 class TestRole(TestCase):

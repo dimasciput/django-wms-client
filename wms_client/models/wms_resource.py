@@ -1,12 +1,9 @@
-    # coding=utf-8
+# coding=utf-8
 """Model class for WMS Resource"""
-__author__ = 'ismailsunni'
-__project_name = 'django-wms-client'
-__filename = 'wms_resource.py'
-__date__ = '11/11/14'
-__copyright__ = 'imajimatika@gmail.com'
-__doc__ = ''
-
+__author__ = 'Irwan Fathurrahman <irwan@kartoza.com>'
+__date__ = '07/09/16'
+__license__ = "GPL"
+__copyright__ = 'kartoza.com'
 
 import os
 import random
@@ -16,24 +13,36 @@ from datetime import datetime
 from django.contrib.gis.db import models
 from django.conf.global_settings import MEDIA_ROOT
 from django.utils.text import slugify
+from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from owslib.wms import WebMapService, ServiceException, CapabilitiesError
-
+from mezzanine.core.models import Orderable, RichText
+from mezzanine.pages.models import Page
 
 import logging
+
 logger = logging.getLogger(__name__)
+
+
+class WMSPage(Page, RichText):
+    """Page bucket for media files."""
+
+    resources = models.ManyToManyField("WMSResource", related_name="WMSResource")
+
+    class Meta:
+        verbose_name = _("WMS")
+        verbose_name_plural = _("WMS")
 
 
 class WMSResource(models.Model):
     """WMS Resource model."""
-
     zoom_lookup = [360.0 / 2 ** i for i in range(20)]
 
     class Meta:
-        """Meta class."""
-        app_label = 'wms_client'
+        verbose_name = _("WMS Resource")
+        verbose_name_plural = _("WMS Resource")
 
     slug = models.SlugField(
         unique=True,
@@ -136,6 +145,10 @@ class WMSResource(models.Model):
         blank=True,
         null=True
     )
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ("wms_map", (), {"slug": self.slug})
 
     def center_south(self):
         return sum([self.north, self.south]) / 2

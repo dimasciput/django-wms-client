@@ -4,7 +4,7 @@
 import factory
 from factory import DjangoModelFactory
 
-from wms_client.models import WMS
+from mezzanine_wms_client.models import WMS
 
 
 class WMSFactory(DjangoModelFactory):

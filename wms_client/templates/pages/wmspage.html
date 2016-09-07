@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block meta_title %}Map{% endblock %}
-{% block title %}Map{% endblock %}
+{% load mezzanine_tags keyword_tags %}
+
+{% block meta_title %}{{ page.meta_title }}{% endblock %}
 {% block extra_css %}
     <style>
         .thumbnail {
@@ -8,20 +9,32 @@
         }
     </style>
 {% endblock extra_css %}
-{% block main %}
 
+{% block meta_keywords %}{% metablock %}
+    {% keywords_for page as keywords %}
+    {% for keyword in keywords %}
+        {% if not forloop.first %}, {% endif %}
+        {{ keyword }}
+    {% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+    {{ page.description }}
+{% endmetablock %}{% endblock %}
+
+{% block title %}
+    {% editable page.title %}{{ page.title }}{% endeditable %}
+{% endblock %}
+
+{% block main %}
     <div class="jumbotron">
         <div class="container">
-            <h1>Web Mapping Gallery</h1>
-
-            <p>
-                This is a gallery of web maps.
-            </p>
+            {{ page.description }}
         </div>
     </div>
 
     <div class="row">
-        {% for wms in wms_set %}
+        {% for wms in page.wmspage.resources.all %}
             <div class="col-sm-6 col-md-4">
                 <div class="thumbnail">
                     <a href="/map/{{ wms.slug }}">
@@ -31,7 +44,7 @@
                     <div>
                         <h3>{{ wms.name }}</h3>
                         <p>{{ wms.description }}</p>
-                        <p><a href="{{ wms.slug }}"
+                        <p><a href="{{ wms.get_absolute_url }}"
                               class="btn btn-default"
                               role="button">View</a></p>
                     </div>
