@@ -73,6 +73,12 @@ class WMSResource(models.Model):
         null=False,
     )
 
+    attribution = models.TextField(
+        help_text=(
+            'Attribution of this layer'),
+        blank=True,
+    )
+
     description = models.TextField(
         help_text=(
             'Description for the map. If left blank, the WMS abstract text '
@@ -145,16 +151,34 @@ class WMSResource(models.Model):
         blank=True,
         null=True
     )
+    north_south_center = models.FloatField(
+        help_text=(
+            'center of map in horizontal'),
+        blank=True,
+        null=True
+    )
+    east_west_center = models.FloatField(
+        help_text=(
+            'center of map in vertical'),
+        blank=True,
+        null=True
+    )
 
     @models.permalink
     def get_absolute_url(self):
         return ("wms_map", (), {"slug": self.slug})
 
     def center_south(self):
-        return sum([self.north, self.south]) / 2
+        if self.north_south_center:
+            return self.north_south_center
+        else:
+            return sum([self.north, self.south]) / 2
 
     def center_east(self):
-        return sum([self.north, self.south]) / 2
+        if self.east_west_center:
+            return self.east_west_center
+        else:
+            return sum([self.west, self.east]) / 2
 
     def __unicode__(self):
         return self.name
