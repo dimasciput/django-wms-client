@@ -1,6 +1,6 @@
 # coding=utf-8
 """URI Routing configuration for this apps."""
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from mezzanine.conf import settings
 
 _slash = "/" if settings.APPEND_SLASH else ""
